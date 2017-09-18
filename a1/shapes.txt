@@ -5,4 +5,5 @@ triangle 3.2 4.3 5.1
 square
 triangle 3.2
 circle 1
+oval 3.0 4.4
 rectangle 9 10.55

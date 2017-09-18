@@ -21,8 +21,9 @@ public class ShapeList
         String filename;
         Scanner in = new Scanner(System.in);
 
-        System.out.print("Enter file address: ");
-        filename = in.nextLine();
+        //System.out.print("Enter file address: ");
+        //filename = in.nextLine();
+        filename = "src/a1/shapes.txt";
 
         listShapes = new LinkedList<Shape>();
 
@@ -61,6 +62,7 @@ public class ShapeList
             else if(cmd.equals("rectangle")) {listShapes.add(new Rectangle(st));}
             else if(cmd.equals("circle")) {listShapes.add(new Circle(st));}
             else if(cmd.equals("triangle")) {listShapes.add(new Triangle(st));}
+            else {System.out.println("Not a valid shape name in line: "+line);}
         }
         catch(NoSuchElementException n)
         {
@@ -87,8 +89,8 @@ public class ShapeList
             System.out.println("");
         }
 
-        System.out.println("totalArea="+totalArea);
-        System.out.println("totalPerimeter="+totalPerimeter);
+        System.out.println("totalArea="+Math.round(totalArea*100)/100D);
+        System.out.println("totalPerimeter="+Math.round(totalPerimeter*100)/100D);
     }
 
 }
