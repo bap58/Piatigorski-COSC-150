@@ -1,0 +1,8 @@
+square 5.1
+rectangle 3.9 8.4
+circle 11.99
+triangle 3.2 4.3 5.1
+square
+triangle 3.2
+circle 1
+rectangle 9 10.55
