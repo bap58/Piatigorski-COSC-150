@@ -1,3 +1,7 @@
+//Brian Piatigorski
+//Project 1 - Shapes
+//Worked with Nico Cuevas
+
 package a1;
 
 import java.io.BufferedReader;
