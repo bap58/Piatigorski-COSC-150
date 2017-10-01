@@ -10,5 +10,7 @@ public class Player
         mark  = m;
     }
 
+    public char getMark() {return mark;}
+
     //might need turn method
 }
