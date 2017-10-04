@@ -10,21 +10,35 @@ package ConnectFour;
 //Based on TicTacToe java program in COSC 150
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class C4 extends JFrame
-    implements MouseListener
+    implements MouseListener, ActionListener
 {
     Player[] player;        //two players: red is player[0], black is player[1]
     Board theBoard;       //a 7x6 board for connect four
 
+    JPanel panelE;          //the east panel of our border layout, will contain reset button
+    JButton resetButton;    //a button to reset the board for a new game
+    JButton saveButton;     //a button to save the game, write it to a file
+    JButton loadButton;     //a button to load the game, read from a file
+
+    JTextField redName;     //a text field to enter Red's name
+    JTextField blackName;   //a text field to enter Black's name
+
+    static String saveFile = "src/ConnectFour/saveFileC4.txt";      //file name to save/load a game
+
+    //Strings in the welcome message pop up, has instructions
     static String welMes = "Welcome to Connect Four!\n";
     static String instr1 = "There are two players, red and black. Red goes first.\n";
     static String instr2 = "On your turn, pick a spot to play your token;";
     static String instr3 = " you must pick the lowest open spot in a column.\n";
-    static String instr4 = "The first person to connect four wins! ";
+    static String instr4 = "The first person to connect four wins!\n\n ";
 
 
     public static void main(String[] args)
@@ -52,12 +66,49 @@ public class C4 extends JFrame
 
         //Instantiate the board
         theBoard = new Board();
-        setLayout(new FlowLayout());
-        add(theBoard);
+            //setLayout(new FlowLayout());  //old layout, before adding buttons
+            //add(theBoard);
+        setLayout(new BorderLayout());
+        add(theBoard, BorderLayout.CENTER);
 
-        setSize(900,800);
+
+        //Instantiate the buttons in the east panel:
+        //reset button, save button, and load button
+        panelE = new JPanel();
+        resetButton = new JButton(" Reset ");
+        saveButton = new JButton(" Save ");
+        loadButton = new JButton(" Load ");
+
+        //instantiate the text fields and frames for adding names for each color
+        redName = new JTextField("Write Red's name here.",25);
+        blackName = new JTextField("Write Black's name here.", 25);
+
+        add(panelE, BorderLayout.EAST);         //adding panelE to the east border
+        panelE.setLayout(new GridLayout(8, 1));
+
+        panelE.add(resetButton);                //put the reset button in the east panel
+        panelE.add(saveButton);                 //put the save button in the east panel
+        panelE.add(loadButton);                 //put the load button in the east panel
+        panelE.add(redName);                    //put the text box for red's name in panel
+        panelE.add(blackName);                  //put the text box for black's name in panel
+
+        //add action listeners for all the buttons and text fields
+        resetButton.addActionListener(this);
+        saveButton.addActionListener(this);
+        loadButton.addActionListener(this);
+        redName.addActionListener(this);
+        blackName.addActionListener(this);
+
+        //Display red and black colors in their name text boxes, center text
+        redName.setBackground(Color.red);
+        redName.setHorizontalAlignment(JTextField.CENTER);
+        blackName.setBackground(Color.lightGray);
+        blackName.setHorizontalAlignment(JTextField.CENTER);
+        
+
+        //determine the window size and make it visible
+        setSize(1200,800);
         setVisible(true);
-
 
         //add a mouse listener to get events
         addMouseListener(this);
@@ -102,5 +153,35 @@ public class C4 extends JFrame
         }
 
         repaint();
+    }
+
+    //action events:
+    //1. reset button was hit --> reset the game
+    //2. save button was hit --> write to saveFile
+    //3. load button was hit --> read from saveFile
+
+    @Override public void actionPerformed(ActionEvent e)
+    {
+        if(e.getSource() == resetButton)        //reset button was hit, clear the board
+        {
+            theBoard.clear();
+            repaint();
+            System.out.println("The game has been reset.");
+        }
+
+        if(e.getSource() == saveButton)         //save button was hit, write a save file
+        {
+            theBoard.save(saveFile);
+            System.out.println("The game has been saved.");
+        }
+
+        if(e.getSource() == loadButton)         //load button was hit, read the save file
+        {
+            theBoard.clear();
+            theBoard.load(saveFile);
+            repaint();
+            System.out.println("The game has been loaded");
+        }
+
     }
 }

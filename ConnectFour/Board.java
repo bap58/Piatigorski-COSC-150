@@ -2,13 +2,16 @@ package ConnectFour;
 
 //The board for Connect Four. Consists of a 7x6 2D array of Squares.
 //The board tracks whose turn it is, where tokens have been played,
-//and if there is a winner.
+//and if there is a winner. It also can save and load itself by
+//writing the coordinates and colors of played pieces to a file.
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Board extends JPanel
 {
@@ -16,6 +19,7 @@ public class Board extends JPanel
     static int columnNum = 7;       //the number of columns
     static int rowNum = 6;          //the number of rows
     LinkedList<Scorable> scorables; //a list of possible ways to win
+
 
 
     //constructor for the board.
@@ -200,4 +204,69 @@ public class Board extends JPanel
         JOptionPane.showMessageDialog( null, whoWin);
     }
 
+
+    //clear the board to reset the game
+    //iterate through each square and set each key back to ' '
+    public void clear()
+    {
+        for(int i = 0; i < columnNum; i++)
+        {
+            for(int j = 0; j < rowNum; j++)
+            {
+                theSquares[i][j].setKey(' ');
+            }
+        }
+    }
+
+    public void save(String filename)       //saves the file by writing out the
+    {                                       //i, j coordinates and key (r or b)
+        try                                 //for all squares with a token in it
+        {
+            File file = new File(filename);
+            FileWriter fileWriter = new FileWriter(file);
+
+            for(int i = 0; i < columnNum; i++)      //iterate through the squares,
+            {
+                for(int j = 0; j < rowNum; j++)
+                {
+                    if(theSquares[i][j].isOccupied())   //if occupied, write to file
+                    {
+                        fileWriter.write(i+" "+j+" "+theSquares[i][j].getKey()+"\n");
+                    }
+                }
+            }
+            fileWriter.flush();
+            fileWriter.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void load(String filename)   //loads file by clearing the board, then
+    {                                   //reading the saved file's coordinates and keys
+
+        try
+        {
+            File file = new File(filename);
+            Scanner scanner = new Scanner(file);
+
+            int i1, j1;
+            char key1;
+
+            while(scanner.hasNext())            //while there are more coordinates left
+            {
+                i1 = scanner.nextInt();         //get the i
+                j1 = scanner.nextInt();         //get the j
+                key1 = scanner.next().charAt(0);    //get the key
+
+                theSquares[i1][j1].setKey(key1);    //set the appropriate square's key
+            }
+        }
+
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
