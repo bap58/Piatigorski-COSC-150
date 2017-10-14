@@ -1,0 +1,5 @@
+line red 288 260 584 291
+oval orange 295 405 73 406
+rectangle green 651 523 283 296
+triangle blue 412 560 261 693 457 745
+text purple 833 210 plzzzz
