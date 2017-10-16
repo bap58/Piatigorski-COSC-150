@@ -70,6 +70,7 @@ public class Shape
     }
 
     //conversion for color to string
+    //useful to save the colors of each shape as a string
     public String colorToString(Color c)
     {
         String returnString = "";

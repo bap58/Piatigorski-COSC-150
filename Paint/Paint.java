@@ -127,6 +127,7 @@ public class Paint extends JFrame
         mouseX = downX = m.getX();
         mouseY = downY = m.getY();
 
+        //figure out if you pressed on a shape by asking each shape in the list
         movingStuff = theList.clickedAShape(downX, downY);
         if(movingStuff) { System.out.println("Clicked on a shape...You are moving it"); }
 
@@ -150,6 +151,8 @@ public class Paint extends JFrame
                         Math.min(downY, mouseY), Math.abs(mouseX - downX),
                         Math.abs(mouseY - downY)));
 
+                //like square, make sure we know which corner to use as the
+                //upper left corner
             } else if (chosenShape == "oval") {
                 theList.add(new Oval(chosenColor, Math.min(downX, mouseX),
                         Math.min(downY, mouseY), Math.abs(mouseX - downX),
@@ -329,6 +332,7 @@ public class Paint extends JFrame
                         Math.abs(mouseX - downX), Math.abs(mouseY - downY));
 
             } else if (chosenShape == "oval") {
+                //check for the top left corner, just like rectangle
                 g.fillOval(Math.min(downX, mouseX), Math.min(downY, mouseY),
                         Math.abs(mouseX - downX), Math.abs(mouseY - downY));
 

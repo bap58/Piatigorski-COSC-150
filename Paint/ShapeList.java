@@ -26,7 +26,7 @@ public class ShapeList
         listShapes.add(s);
     }
 
-    //draws the list of shapes
+    //draws all shapes by iterating through the list
    public void drawList(Graphics g)
    {
        Iterator<Shape> it = listShapes.iterator();
@@ -68,8 +68,8 @@ public class ShapeList
         //transform the shape if not null
         if(s != null)
         {
-            int deltaX = upX - downX;
-            int deltaY = upY - downY;
+            int deltaX = upX - downX;       //get the x displacement
+            int deltaY = upY - downY;       //get the y displacement
             s.transform(deltaX, deltaY);
         }
 
@@ -80,9 +80,11 @@ public class ShapeList
     {
         try
         {
+            //make a file writer
             File file = new File(filename);
             FileWriter fileWriter = new FileWriter(file);
 
+            //write each shape in the list
             Iterator<Shape> it = listShapes.iterator();
             while(it.hasNext())
             {
@@ -108,13 +110,16 @@ public class ShapeList
     {
         try
         {
+            //get a file scanner
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
 
+
             while(scanner.hasNext())            //while there are more shapes left
             {
-                String nextType = scanner.next();
+                String nextType = scanner.next();   //what kind of shape is it
 
+                //handle each kind of shape
                 if(nextType.equals("line"))
                 {
                     Color c = stringToColor(scanner.next());
@@ -182,6 +187,7 @@ public class ShapeList
 
 
     //conversion for string to color
+    //useful for reading a file and knowing what color the shape was
     public Color stringToColor(String s)
     {
         Color returnColor = Color.black;
