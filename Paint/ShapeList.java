@@ -145,7 +145,7 @@ public class ShapeList
                     int h = scanner.nextInt();
                     int w = scanner.nextInt();
 
-                    add(new Oval(c, x, y, w, h));
+                    add(new Rectangle(c, x, y, w, h));
                 }
                 else if(nextType.equals("triangle"))
                 {

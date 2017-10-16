@@ -53,10 +53,10 @@ public class Rectangle extends Shape
     {
         boolean clicked = false;
 
-        if((Math.abs(xclick - x) < 20 && Math.abs(yclick - y) < 20) ||
-                ((Math.abs(xclick - (x+width)) < 20 && Math.abs(yclick - y) < 20)) ||
-                ((Math.abs(xclick - x) < 20 && Math.abs(yclick - (y+height)) < 20)) ||
-                ((Math.abs(xclick - (x+width)) < 20 && Math.abs(yclick - (y+height)) < 20)))
+        if((Math.abs(xclick - x) < tolerance && Math.abs(yclick - y) < tolerance) ||
+                ((Math.abs(xclick - (x+width)) < tolerance && Math.abs(yclick - y) < tolerance)) ||
+                ((Math.abs(xclick - x) < tolerance && Math.abs(yclick - (y+height)) < tolerance)) ||
+                ((Math.abs(xclick - (x+width)) < tolerance && Math.abs(yclick - (y+height)) < tolerance)))
         {
             clicked = true;
         }

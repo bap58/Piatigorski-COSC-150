@@ -49,9 +49,9 @@ public class Triangle extends Shape
     {
         boolean clicked = false;
 
-        if((Math.abs(xclick - x) < 20 && Math.abs(yclick - y) < 20) ||
-                ((Math.abs(xclick - x1) < 20 && Math.abs(yclick - y1) < 20))||
-                ((Math.abs(xclick - x2) < 20 && Math.abs(yclick - y2) < 20)))
+        if((Math.abs(xclick - x) < tolerance && Math.abs(yclick - y) < tolerance) ||
+                ((Math.abs(xclick - x1) < tolerance && Math.abs(yclick - y1) < tolerance))||
+                ((Math.abs(xclick - x2) < tolerance && Math.abs(yclick - y2) < tolerance)))
         {
             clicked = true;
         }

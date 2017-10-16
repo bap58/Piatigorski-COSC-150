@@ -36,7 +36,7 @@ public class TextBox extends Shape
     {
         boolean clicked = false;
 
-        if((Math.abs(xclick - x) < 20 && Math.abs(yclick - y) < 20))
+        if((Math.abs(xclick - x) < tolerance && Math.abs(yclick - y) < tolerance))
         {
             clicked = true;
         }

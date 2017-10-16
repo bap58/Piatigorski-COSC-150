@@ -7,6 +7,7 @@ public class Shape
     String type;      //the kind of shape it is
     Color color;      //color of the shape
     int x, y;                   //coordinates of the shape, from top left:
+    static int tolerance = 20;  //the tolerance to click on a shape
 
     //x and y coordinates vary meaning for each shape:
     //Lines: (x,y) is the first endpoint of the line
