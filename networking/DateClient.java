@@ -3,12 +3,12 @@ package networking;
 // Silberschatz et al OS Concepts with Java 6e p.131+
 
 /* This is a demo program, to be used with DateServer.java.
-   Client calls Server at given IP and port number.  These 
+   BlabClient calls BlabServer at given IP and port number.  These
    have to match the server (and so you might want to input
    these if they change a lot instead of just having them
    hard-wired into the code).
-   The Client says "What time is it?" which the Server is expecting
-   to read, and then the Server sends the date back.
+   The BlabClient says "What time is it?" which the BlabServer is expecting
+   to read, and then the BlabServer sends the date back.
    
    
 */
