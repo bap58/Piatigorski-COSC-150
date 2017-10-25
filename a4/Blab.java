@@ -22,7 +22,15 @@ public class Blab
 
     public static void main(String[] args)
     {
-        new Blab(args[0], args[1]);     //args[0] is the string for the ip, args[1] is the port number
+        if(args.length != 2)
+        {
+            System.out.println("You must enter two command line arguments:");
+            System.out.println("1. the ip address (localhost is fine)");
+            System.out.println("2. the port number");
+        }
+        else {
+            new Blab(args[0], args[1]);     //args[0] is the string for the ip, args[1] is the port number
+        }
     }
 
     //constructor

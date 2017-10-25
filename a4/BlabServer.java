@@ -112,6 +112,7 @@ public class BlabServer
                         if(line.equals("\\quit"))                   //if your buddy quit, quit too
                         {
                             System.out.println("Your buddy has left...exiting chat.");
+                            allDone = true;
                             System.exit(1);
                         }
                     }
