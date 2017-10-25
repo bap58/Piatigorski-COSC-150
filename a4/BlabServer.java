@@ -1,22 +1,12 @@
 package a4;
-// DateServer.java
-// Silberschatz et al OS Concepts with Java e6 p130+
 
 /*
-   This is a demo program for basic socket stuff, to be used with
-   DateClient.java.
-   The BlabServer starts by setting up a ServerSocket, a place for clients
-   to connect to.  Then it waits (repeatedly) for a client to
-   call.  When client calls, we have an active Socket.  We open
-   an input stream to read from it and an output stream to write
-   to it.  Note: the sequence of when the server and client each
-   write and read must be exactly agreed upon between the two.
-   If not, the pair will hang.
-   In this case, the BlabServer expects a message from the BlabClient
-   and then the BlabServer sends the date.
-   (In this demo pair, the message is "What time is it?",
-   but in general the message could be whatever and the
-   BlabServer could respond specifically to it).
+This is a class called BlabServer. It creates a server
+to which clients can connect. A server and a client
+chat over this network by entering text into the
+keyboard and hitting enter, and the client's text is
+read and output to the screen. It runs a separate thread
+to listen for client messages and output them.
 */
 
 import java.io.*;
@@ -24,74 +14,80 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static a4.Blab.port;
-
 public class BlabServer
 {
-    ServerSocket sock;
-    boolean keepGoing = true;
-    boolean allDone = false;
+    int port;                   //the port number
+    ServerSocket sock;          //the ServerSocket for this server
+    boolean allDone = false;    //gets set to true if user types \quit
 
-    public static void main( String[] args ) //throws IOException
+    //constructor, runs most of the good stuff
+    public BlabServer(int p)
     {
-        new BlabServer();
-    }
+        //assign port number
+        port = p;
 
-    public BlabServer()
-    {
-        System.out.println("date server starting ...");
+        System.out.println("blab server starting ...");
         try
         {
             sock = new ServerSocket(port); // open socket
 
-            // listen for connections
+            //do this while we haven't quit yet
             while (!allDone)
             {
-                // when client calls, establish output stream to client and send date
+                // when client calls, it happens in two steps:
+                //1. the client tests if a server is open. accept that test.
                 Socket client = sock.accept(); // this blocks until a client calls
-                System.out.println("DateServer: accepts client connection ");
+                System.out.println("BlabServer: accepts test connection ");
 
+                //2. client actually calls, accept that too, and keep this one.
+                client = sock.accept();
+                System.out.println("BlabServer: accepts client connection ");
+
+                //start a new thread listening for messages from the client
                 Thread listener = new Thread(new ServerListens(client));
                 listener.start();
 
-                //InputStream in = client.getInputStream();
-                //BufferedReader bin = new BufferedReader( new InputStreamReader(in) );
-                // Thread.sleep(1000);
-                //String msg = bin.readLine();
-                //System.out.println("DateServer: read ="+msg);
-                //PrintWriter pout = new PrintWriter( client.getOutputStream(), true);
-                //String writeme = new java.util.Date().toString();
-                //pout.println( writeme );
-                //client.close();
-
+                //create a buffered writer to write to the output stream
                 OutputStream out = client.getOutputStream();
                 BufferedWriter bout = new BufferedWriter( new OutputStreamWriter( out ) );
+
+                //string to store whatever the user writes, to send to the client
                 String userLine;
 
                 while(!allDone)
                 {
-                    Scanner s = new Scanner(System.in);
-                    userLine = s.nextLine();
-                    bout.write(userLine+"\n");
-                    bout.flush();
+                    Scanner s = new Scanner(System.in);         //creates a scanner to read from the user
+                    userLine = s.nextLine();                    //stores what the user read
+                    System.out.println("You: "+userLine);       //echos the user's input
 
-                    if(userLine.equals("\\quit"))
+                    bout.write(userLine+"\n");              //write to the output stream
+                    bout.flush();                               //Send it.
+
+                    if(userLine.equals("\\quit"))               //if quit, bread the loop to close
                     {
                         allDone = true;
                     }
                 }
 
             }
-            sock.close(); // is actually never called in this code
+            sock.close();
         }
-        catch( Exception e ) { System.err.println("DateServer: error = "+e); }
+        catch( Exception e )
+        {
+            System.err.println("BlabServer: error = "+e);
+            e.printStackTrace();
+        }
+
         System.exit(0);
     }
 
+
+    //a runnable class to have a thread listen for client's messages
     public class ServerListens implements Runnable
     {
         Socket socket;
 
+        //constructor
         ServerListens(Socket s)
         {
             socket = s;
@@ -102,18 +98,21 @@ public class BlabServer
         {
             try
             {
-                Scanner in = new Scanner(socket.getInputStream());
+                //System.out.println("listening in server...");
+                Scanner in = new Scanner(socket.getInputStream());      //scanner to read from the input
 
+                //while the socket is still open, which should be until we quit unless something goes wrong
                 while(!socket.isClosed())
                 {
-                    if(in.hasNextLine())
+                    if(in.hasNextLine())        //if something was sent
                     {
-                        String line = in.nextLine();
-                        System.out.println(line);
+                        String line = in.nextLine();                //read what was sent
+                        System.out.println("Chat Buddy: "+line);    //and output it to the screen
 
-                        if(line.equals("\\quit"))
+                        if(line.equals("\\quit"))                   //if your buddy quit, quit too
                         {
-                            allDone = true;
+                            System.out.println("Your buddy has left...exiting chat.");
+                            System.exit(1);
                         }
                     }
                 }
@@ -121,7 +120,8 @@ public class BlabServer
 
             catch(Exception e)
             {
-                System.out.println("Exception in ClientListens: "+e);
+                System.out.println("Exception in ServerListens: "+e);
+                e.printStackTrace();
             }
         }
     }

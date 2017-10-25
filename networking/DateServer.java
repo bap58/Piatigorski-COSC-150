@@ -41,7 +41,7 @@ public class DateServer
 	   System.out.println("date server starting ...");
       try
       {
-         sock = new ServerSocket(5155); // open socket
+         sock = new ServerSocket(11058); // open socket
  
          // listen for connections
          while (keepGoing) // has no way to stop as written

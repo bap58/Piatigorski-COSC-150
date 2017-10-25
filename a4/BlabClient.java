@@ -1,61 +1,59 @@
 package a4;
-// DateClient.java
-// Silberschatz et al OS Concepts with Java 6e p.131+
 
-/* This is a demo program, to be used with DateServer.java.
-   BlabClient calls BlabServer at given IP and port number.  These
-   have to match the server (and so you might want to input
-   these if they change a lot instead of just having them
-   hard-wired into the code).
-   The BlabClient says "What time is it?" which the BlabServer is expecting
-   to read, and then the BlabServer sends the date back.
-
-
+/*
+This is a class called BlabClient. It creates a client
+connects to a server. A server and a client
+chat over this network by entering text into the
+keyboard and hitting enter, and the server's text is
+read and output to the screen. It runs a separate thread
+to listen for server messages and output them.
 */
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-import static a4.Blab.ip;
-import static a4.Blab.port;
-import static java.lang.System.in;
 
 public class BlabClient
 {
     boolean allDone = false;
+    int port;
+    String ip;
 
-    public static void main( String[] args ) // throws IOException
+    //constructor, most of the action here
+    public BlabClient(int p, String str)
     {
-        new BlabClient();
-    }
+        //assign the port and ip address
+        port = p;
+        ip = str;
 
-    public BlabClient()
-    {
         System.out.println("blab client starting ...");
         try
         {
+            //connect to the server
             Socket sock = new Socket(ip,port );
-            //Socket sock = new Socket("141.161.88.4", 5155);
 
+            //start a new thread listening for messages from the server
             Thread listener = new Thread(new ClientListens(sock));
             listener.start();
 
-            //InputStream in = sock.getInputStream();
-            //BufferedReader bin = new BufferedReader( new InputStreamReader(in) );
-
+            //get a buffered writer to write to the output stream to the server
             OutputStream out = sock.getOutputStream();
             BufferedWriter bout = new BufferedWriter( new OutputStreamWriter( out ) );
+
+            //a string to store what the user wrote
             String userLine;
 
-            while(!allDone)
+            while(!allDone)     //while the user hasn't quit, get what they wrote
             {
-                Scanner s = new Scanner(System.in);
-                userLine = s.nextLine();
-                bout.write(userLine+"\n");
-                bout.flush();
+                Scanner s = new Scanner(System.in);     //get a scanner to retrieve from the keyboard
+                userLine = s.nextLine();                //read the line
+                System.out.println("You: "+userLine);   //and echo the user's input
 
-                if(userLine.equals("\\quit"))
+                bout.write(userLine+"\n");          //write to the output stream
+                bout.flush();                           //Send it.
+
+                if(userLine.equals("\\quit"))           //if the user typed \quit, we're all done.
                 {
                     allDone = true;
                 }
@@ -70,10 +68,12 @@ public class BlabClient
         System.exit(0);
     }
 
+    //runnable class to constantly listen for new messages from the server
     public class ClientListens implements Runnable
     {
         Socket socket;
 
+        //constructor
         ClientListens(Socket s)
         {
             socket = s;
@@ -84,18 +84,20 @@ public class BlabClient
         {
             try
             {
-                Scanner in = new Scanner(socket.getInputStream());
+                //System.out.println("Client is listening...");
+                Scanner in = new Scanner(socket.getInputStream());      //get a scanner to read from the input stream
 
-                while(!socket.isClosed())
+                while(!socket.isClosed())       //while the socket is open, which should be until we quit
                 {
-                    if(in.hasNextLine())
+                    if(in.hasNextLine())        //if there's something to get from the input stream
                     {
-                        String line = in.nextLine();
-                        System.out.println(line);
+                        String line = in.nextLine();                //get what the server wrote
+                        System.out.println("Chat Buddy: "+line);    //print it out
 
-                        if(line.equals("\\quit"))
+                        if(line.equals("\\quit"))                   //if your chat buddy quit, quit too
                         {
-                            allDone = true;
+                            System.out.println("Your buddy has left...exiting chat.");
+                            System.exit(1);
                         }
                     }
                 }
